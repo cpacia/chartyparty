@@ -13,6 +13,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"sync"
 )
 
 const (
@@ -63,11 +64,13 @@ type game struct {
 
 type server struct {
 	games map[string]*game
+	mtx   sync.Mutex
 }
 
 func main() {
 	s := &server{
 		games: make(map[string]*game),
+		mtx:   sync.Mutex{},
 	}
 
 	wsHub := newHub()
@@ -94,6 +97,9 @@ func main() {
 }
 
 func (s *server) handlePOSTNewGame(w http.ResponseWriter, r *http.Request) {
+	s.mtx.Lock()
+	defer s.mtx.Unlock()
+
 	name := r.URL.Query().Get("name")
 
 	gameID := make([]byte, 8)
@@ -117,6 +123,9 @@ func (s *server) handlePOSTNewGame(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) handlePOSTJoinGame(w http.ResponseWriter, r *http.Request) {
+	s.mtx.Lock()
+	defer s.mtx.Unlock()
+
 	name := r.URL.Query().Get("name")
 	gameID := r.URL.Query().Get("gameID")
 
@@ -141,6 +150,9 @@ func (s *server) handlePOSTJoinGame(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) handlePOSTSubmitCard(w http.ResponseWriter, r *http.Request) {
+	s.mtx.Lock()
+	defer s.mtx.Unlock()
+
 	gameID := r.URL.Query().Get("gameID")
 	userID := r.URL.Query().Get("userID")
 	card := r.URL.Query().Get("card")
@@ -176,6 +188,9 @@ func (s *server) handlePOSTSubmitCard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) handleGETChart(w http.ResponseWriter, r *http.Request) {
+	s.mtx.Lock()
+	defer s.mtx.Unlock()
+
 	id := r.URL.Query().Get("gameID")
 
 	game, ok := s.games[id]
@@ -196,6 +211,9 @@ func (s *server) handleGETChart(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) handleGETCard(w http.ResponseWriter, r *http.Request) {
+	s.mtx.Lock()
+	defer s.mtx.Unlock()
+	
 	id := r.URL.Query().Get("gameID")
 
 	game, ok := s.games[id]
