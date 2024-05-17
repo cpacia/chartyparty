@@ -11,6 +11,8 @@ import (
 	"math/rand/v2"
 	"net/http"
 	"path"
+	"path/filepath"
+	"strings"
 )
 
 const (
@@ -82,6 +84,7 @@ func main() {
 	r.HandleFunc("/card", s.handleGETCard).Methods("GET")
 	r.PathPrefix("/charts").Handler(http.HandlerFunc(s.serveStaticFile))
 	r.PathPrefix("/cards").Handler(http.HandlerFunc(s.serveStaticFile))
+	r.PathPrefix("/").Handler(http.HandlerFunc(s.serveStaticFile))
 	mx.Handle("/", r)
 	mx.Handle("/ws", newWebsocketHandler(wsHub))
 
@@ -108,6 +111,7 @@ func (s *server) handlePOSTNewGame(w http.ResponseWriter, r *http.Request) {
 	}
 
 	s.games[hex.EncodeToString(gameID)] = game
+	fmt.Printf("New game. ID: %s, Name: %s\n", hex.EncodeToString(gameID), name)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprint(w, fmt.Sprintf(`{"gameID": "%s", "userID": "%s"}`, hex.EncodeToString(gameID), hex.EncodeToString(userID)))
 }
@@ -165,6 +169,8 @@ func (s *server) handlePOSTSubmitCard(w http.ResponseWriter, r *http.Request) {
 		game.submission2 = true
 	}
 
+	fmt.Printf("Selection. Player %s, Game: %s, Card: %s\n", userID, gameID, card)
+
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprint(w, "{}")
 }
@@ -190,7 +196,7 @@ func (s *server) handleGETChart(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) handleGETCard(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
+	id := r.URL.Query().Get("gameID")
 
 	game, ok := s.games[id]
 	if !ok {
@@ -223,6 +229,16 @@ func (s *server) serveStaticFile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	f.Close()
+
+	path := "." + r.URL.Path
+	ext := strings.ToLower(filepath.Ext(path))
+	if ext == ".js" {
+		w.Header().Set("Content-Type", "application/javascript")
+	} else if ext == ".css" {
+		w.Header().Set("Content-Type", "text/css")
+	} else if ext == ".html" {
+		w.Header().Set("Content-Type", "text/html")
+	}
 
 	// Serve the file from the embedded file system
 	http.FileServer(http.FS(fileSystem)).ServeHTTP(w, r)

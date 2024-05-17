@@ -54,6 +54,7 @@ func (c *connection) reader() {
 				game.conn1.send <- []byte(fmt.Sprintf(`{"connect": "%s"}`, game.player2Name))
 			}
 		}
+		fmt.Printf("Websocket. User: %s joined game: %s\n", joinMsg.Join.UserID, joinMsg.Join.GameID)
 	}
 	c.ws.Close()
 }

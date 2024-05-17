@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charty Party</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="landing-page" class="page active">
+    <h1>Welcome to Charty Party</h1>
+    <input type="text" id="username" placeholder="Enter Name">
+    <button id="new-game">New Game</button>
+    <div>or</div>
+    <input type="text" id="game-id" placeholder="Game ID">
+    <button id="join-game">Join</button>
+</div>
+<div id="game-page" class="page hidden">
+    <div id="game-id-display"></div>
+    <div id="chart" class="chart">
+        <img id="chart-image" src="" alt="Chart Image" class="chart-image">
+    </div>
+    <div class="players">
+        <div id="player1" class="player">
+            <div id="player1-name" class="player-name">Player1</div>
+            <img id="player1-image" src="" alt="Player Image" class="player-image hidden">
+        </div>
+        <div id="player2" class="player">
+            <div id="player2-name" class="player-name">Player2</div>
+            <img id="player2-image" src="" alt="Player Image" class="player-image hidden">
+        </div>
+    </div>
+    <div class="cards">
+        <div class="card" id="card1" data-id=""></div>
+        <div class="card" id="card2" data-id=""></div>
+        <div class="card" id="card3" data-id=""></div>
+        <div class="card" id="card4" data-id=""></div>
+        <div class="card" id="card5" data-id=""></div>
+        <div class="card" id="card6" data-id=""></div>
+        <div class="card" id="card7" data-id=""></div>
+    </div>
+    <button id="select" disabled>Select</button>
+    <button id="next" disabled>Next</button>
+</div>
+<script src="index.js"></script>
+</body>
+</html>

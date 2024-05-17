@@ -1,0 +1,114 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.page {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.page.active {
+    display: flex;
+}
+
+#landing-page {
+    text-align: center;
+}
+
+#game-page {
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.chart {
+    width: 50%;
+    height: 50%;
+    background-color: orange;
+    margin-top: 20px;
+}
+
+.chart img {
+    width: 100%;
+    height: 100%;
+    background-color: orange;
+    margin-top: 20px;
+}
+
+.players {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.player {
+    width: 150px;
+    height: 220px;
+    background-color: blue;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.player img {
+    width: 100%;
+    height: 85%;
+    background-color: orange;
+}
+
+.player-name {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.cards {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.card {
+    width: 12%;
+    height: 200px;
+    background-color: red;
+    border: 2px solid transparent;
+}
+
+.card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.card.selected {
+    border-color: blue;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 1200px) {
+    .players, .cards {
+        flex-direction: column;
+    }
+
+    .card, .player {
+        width: 80%;
+        margin-bottom: 10px;
+    }
+}
